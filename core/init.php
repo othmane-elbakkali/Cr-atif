@@ -8,3 +8,5 @@ require_once '../core/connexion.php';
 
 // 3. charger les helpers
 require_once '../core/helpers.php';
+
+require_once '../core/constantes.php';

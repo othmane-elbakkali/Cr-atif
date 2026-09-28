@@ -1,9 +1,11 @@
-RewriteEngine on
+RewriteEngine On
 
-# --------------------------------------------
-# Fichiers ou dossiers réels (css, js, images, pdf, zip, etc.) : pas de réécriture, on les sert tels quels
+# Fichiers ou dossiers réels : pas de réécriture
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# --------------------------------------------
+# Route : /projets/id/slug
+# Exemple : /projets/12/mon-projet
+# Devient : ?projets=show&id=12
+RewriteRule ^projets\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*$ ?projets=show&id=$1 [L]

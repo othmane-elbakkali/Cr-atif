@@ -1,9 +1,16 @@
 <?php
 // ROUTER PRINCIPAL
 
+
+if (isset($_GET['projets'])):
+    include_once '../app/routers/projets.php';
+
 // ROUTE PAR DEFAUT
 // PATTERN:
-// CTRL: PagesController
+// CTRL: ProjetsController
 // ACTION: homeAction
-include_once '../app/controllers/pagesController.php';
-\App\Controllers\PagesController\homeAction($connexion);
+else:
+    include_once '../app/controllers/projetsController.php';
+    \App\Controllers\ProjetsController\homeAction($connexion);
+
+endif;
