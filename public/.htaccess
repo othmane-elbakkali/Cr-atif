@@ -5,7 +5,16 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Route : /projets/id/slug
-# Exemple : /projets/12/mon-projet
+# Route : /projects (accueil)
+# Devient : index.php (sans paramètre = route par défaut du routeur)
+RewriteRule ^projects$ index.php [L]
+
+# Route : /projets/id/slug.html
+# Exemple : /projets/12/mon-projet.html
 # Devient : ?projets=show&id=12
-RewriteRule ^projets\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*$ ?projets=show&id=$1 [L]
+RewriteRule ^projets\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\.html$ ?projets=show&id=$1 [L]
+
+# Route : /projets/delete/id/slug.html
+# Exemple : /projets/delete/12/mon-projet.html
+# Devient : ?projets=delete&id=12
+RewriteRule ^projets\/delete\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\.html$ ?projets=delete&id=$1 [L]

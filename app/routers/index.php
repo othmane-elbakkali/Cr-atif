@@ -11,6 +11,6 @@ if (isset($_GET['projets'])):
 // ACTION: homeAction
 else:
     include_once '../app/controllers/projetsController.php';
-    \App\Controllers\ProjetsController\homeAction($connexion);
+    \App\Controllers\ProjetsController\indexAction($connexion);
 
 endif;
