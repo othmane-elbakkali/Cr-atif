@@ -71,6 +71,21 @@ function addFormAction(PDO $connexion): void
     include_once '../app/models/tagsModel.php';
     $tags = \App\Models\TagsModel\findAll($connexion);
 
+    // le formulaire est partagé avec la modification :
+    // pour un ajout, le projet est vide et aucun tag n'est coché
+    $projet = [
+        'titre'        => '',
+        'resume'       => '',
+        'texte'        => '',
+        'creatif'      => 0,
+        'projet_image' => null
+    ];
+    $projetTags = [];
+
+    // titre du formulaire et adresse où il envoie ses données
+    $titreForm = "Ajouter un projet";
+    $action    = "projects/add/insert.html";
+
     // je remplis les zones dynamiques du template
     // et je masque le bandeau sur cette page
     global $content, $title, $afficherHeader;
@@ -82,7 +97,6 @@ function addFormAction(PDO $connexion): void
     include '../app/views/projet/form.php';
     $content = ob_get_clean();
 }
-
 
 // Ajout d'un projet (données du formulaire), puis retour à l'accueil
 // $data  : les champs texte du formulaire ($_POST)
@@ -110,4 +124,37 @@ function insertAction(PDO $connexion, array $data, array $files): void
     // 4. je retourne à l'accueil
     header('Location: ' . PUBLIC_BASE_URL);
     exit;
+}
+
+// Formulaire de modification d'un projet (pré-rempli avec ses données)
+function editFormAction(PDO $connexion, int $id): void
+{
+    // je demande le projet à modifier au modèle
+    include_once '../app/models/projetsModel.php';
+    $projet = \App\Models\ProjetsModel\findOneById($connexion, $id);
+
+    // je demande les créa'tifs et les tags aux modèles (pour remplir le formulaire)
+    include_once '../app/models/creatifsModel.php';
+    $creatifs = \App\Models\CreatifsModel\findAll($connexion);
+
+    include_once '../app/models/tagsModel.php';
+    $tags = \App\Models\TagsModel\findAll($connexion);
+
+    // je garde seulement les id des tags du projet (pour cocher les bonnes cases)
+    $projetTags = array_column(\App\Models\TagsModel\findAllByProjetId($connexion, $id), 'id');
+
+    // titre du formulaire et adresse où il envoie ses données
+    $titreForm = "Modifier le projet";
+    $action    = "projects/" . $id . "/" . \Core\Helpers\slugify($projet['titre']) . "/edit/update.html";
+
+    // je remplis les zones dynamiques du template
+    // et je masque le bandeau sur cette page
+    global $content, $title, $afficherHeader;
+    $title          = "- Modifier " . $projet['titre'];
+    $afficherHeader = false;
+
+    // je charge la vue 'form' dans $content (la même que pour l'ajout)
+    ob_start();
+    include '../app/views/projet/form.php';
+    $content = ob_get_clean();
 }

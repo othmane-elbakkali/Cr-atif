@@ -23,7 +23,11 @@ RewriteRule ^projets\/delete\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\.htm
 # Devient : ?projets=addForm
 RewriteRule ^projects\/add\/form\.html$ ?projets=addForm [L]
 
-
 # Route : /projects/add/insert.html (ajout, données du formulaire en POST)
 # Devient : ?projets=insert
 RewriteRule ^projects\/add\/insert\.html$ ?projets=insert [L]
+
+# Route : /projects/id/slug/edit/form.html (formulaire de modification)
+# Exemple : /projects/12/mon-projet/edit/form.html
+# Devient : ?projets=editForm&id=12
+RewriteRule ^projects\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\/edit\/form\.html$ ?projets=editForm&id=$1 [L]

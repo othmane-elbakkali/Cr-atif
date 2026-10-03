@@ -11,7 +11,7 @@
 
 <!-- Actions : éditer / supprimer -->
 <div class="mb-4">
-    <a href="form.html" class="ct-btn ct-btn--primary">Éditer le projet</a>
+    <a href="projects/<?php echo $projet['projet_id']; ?>/<?php echo \Core\Helpers\slugify($projet['titre']); ?>/edit/form.html" class="ct-btn ct-btn--primary">Éditer le projet</a>
     <a href="projets/delete/<?php echo $projet['projet_id']; ?>/<?php echo \Core\Helpers\slugify($projet['titre']); ?>.html" class="ct-btn ct-btn--danger" onclick="return confirm('Supprimer définitivement ce projet ?');">Supprimer le projet</a>
 </div>
 

@@ -44,6 +44,15 @@ switch ($_GET['projets']):
         ProjetsController\insertAction($connexion, $_POST, $_FILES);
         break;
 
+    // FORMULAIRE DE MODIFICATION
+    // PATTERN: /projects/id/slug/edit/form.html
+    // URL: ?projets=editForm&id=x
+    // CTRL: projetsController
+    // ACTION: editForm
+    case 'editForm':
+        ProjetsController\editFormAction($connexion, $_GET['id']);
+        break;
+
     // PAR DÉFAUT : liste des projets
     default:
         ProjetsController\indexAction($connexion);
