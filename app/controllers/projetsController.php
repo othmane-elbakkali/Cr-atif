@@ -103,15 +103,8 @@ function addFormAction(PDO $connexion): void
 // $files : les fichiers envoyés ($_FILES), ici l'image
 function insertAction(PDO $connexion, array $data, array $files): void
 {
-    // 1. l'image : je la copie dans public/images sous un nom unique
-    $image = null;
-    if (isset($files['image']) && $files['image']['error'] === UPLOAD_ERR_OK):
-        $extension = strtolower(pathinfo($files['image']['name'], PATHINFO_EXTENSION));
-        if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])):
-            $image = uniqid() . '.' . $extension;
-            move_uploaded_file($files['image']['tmp_name'], 'images/' . $image);
-        endif;
-    endif;
+    // 1. l'image : je l'enregistre dans public/images (voir core/helpers.php)
+    $image = \Core\Helpers\uploadImage($files['image'] ?? []);
 
     // 2. je demande au modèle d'ajouter le projet (il me renvoie l'id du nouveau projet)
     include_once '../app/models/projetsModel.php';
@@ -157,4 +150,29 @@ function editFormAction(PDO $connexion, int $id): void
     ob_start();
     include '../app/views/projet/form.php';
     $content = ob_get_clean();
+}
+
+// Modification d'un projet (données du formulaire), puis retour à l'accueil
+// $data  : les champs texte du formulaire ($_POST)
+// $files : les fichiers envoyés ($_FILES), ici l'image
+function updateAction(PDO $connexion, int $id, array $data, array $files): void
+{
+    // 1. je demande le projet actuel au modèle (pour garder son image si on n'en envoie pas de nouvelle)
+    include_once '../app/models/projetsModel.php';
+    $projet = \App\Models\ProjetsModel\findOneById($connexion, $id);
+
+    // 2. l'image : la nouvelle s'il y en a une, sinon l'ancienne
+    $image = \Core\Helpers\uploadImage($files['image'] ?? []) ?? $projet['projet_image'];
+
+    // 3. je demande au modèle de modifier le projet
+    \App\Models\ProjetsModel\updateOneById($connexion, $id, $data, $image);
+
+    // 4. je remplace ses tags : je retire les anciens, puis j'ajoute les cases cochées
+    include_once '../app/models/tagsModel.php';
+    \App\Models\TagsModel\deleteAllByProjetId($connexion, $id);
+    \App\Models\TagsModel\insertAllByProjetId($connexion, $id, $data['tags'] ?? []);
+
+    // 5. je retourne à l'accueil
+    header('Location: ' . PUBLIC_BASE_URL);
+    exit;
 }

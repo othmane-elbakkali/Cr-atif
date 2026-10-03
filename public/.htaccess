@@ -31,3 +31,8 @@ RewriteRule ^projects\/add\/insert\.html$ ?projets=insert [L]
 # Exemple : /projects/12/mon-projet/edit/form.html
 # Devient : ?projets=editForm&id=12
 RewriteRule ^projects\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\/edit\/form\.html$ ?projets=editForm&id=$1 [L]
+
+# Route : /projects/id/slug/edit/update.html (modification, données du formulaire en POST)
+# Exemple : /projects/12/mon-projet/edit/update.html
+# Devient : ?projets=update&id=12
+RewriteRule ^projects\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\/edit\/update\.html$ ?projets=update&id=$1 [L]

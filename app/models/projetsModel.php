@@ -69,3 +69,28 @@ function insertOne(PDO $connexion, array $data, ?string $image): int
     // l'id du projet qui vient d'être ajouté
     return intval($connexion->lastInsertId());
 }
+
+
+// Je modifie un projet (la date de création ne change pas)
+// $data : les champs du formulaire (titre, resume, texte, creatif)
+// $image : le nom du fichier image (le nouveau, ou l'ancien si on n'en a pas envoyé)
+function updateOneById(PDO $connexion, int $id, array $data, ?string $image): int
+{
+    $sql = "UPDATE projets
+            SET titre   = :titre,
+                resume  = :resume,
+                texte   = :texte,
+                image   = :image,
+                creatif = :creatif
+            WHERE id = :id;";
+
+    $rs = $connexion->prepare($sql);
+    $rs->bindValue(':titre', $data['titre'], PDO::PARAM_STR);
+    $rs->bindValue(':resume', $data['resume'], PDO::PARAM_STR);
+    $rs->bindValue(':texte', $data['texte'], PDO::PARAM_STR);
+    $rs->bindValue(':image', $image, PDO::PARAM_STR);
+    $rs->bindValue(':creatif', $data['creatif'], PDO::PARAM_INT);
+    $rs->bindValue(':id', $id, PDO::PARAM_INT);
+
+    return intval($rs->execute());
+}

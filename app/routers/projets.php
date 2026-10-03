@@ -53,6 +53,15 @@ switch ($_GET['projets']):
         ProjetsController\editFormAction($connexion, $_GET['id']);
         break;
 
+    // MODIFICATION D'UN PROJET (données du formulaire en POST)
+    // PATTERN: /projects/id/slug/edit/update.html
+    // URL: ?projets=update&id=x
+    // CTRL: projetsController
+    // ACTION: update
+    case 'update':
+        ProjetsController\updateAction($connexion, $_GET['id'], $_POST, $_FILES);
+        break;
+
     // PAR DÉFAUT : liste des projets
     default:
         ProjetsController\indexAction($connexion);
