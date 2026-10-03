@@ -1,9 +1,10 @@
 <?php
+// ROUTEUR DES PROJETS
+// URL: ?projets=...
 
-use \app\Controllers\ProjetsController;
+use \App\Controllers\ProjetsController;
 
-include_once "../app/controllers/projetsController.php";
-
+include_once '../app/controllers/projetsController.php';
 
 switch ($_GET['projets']):
 
@@ -25,6 +26,25 @@ switch ($_GET['projets']):
         ProjetsController\deleteAction($connexion, $_GET['id']);
         break;
 
+    // FORMULAIRE D'AJOUT
+    // PATTERN: /projects/add/form.html
+    // URL: ?projets=addForm
+    // CTRL: projetsController
+    // ACTION: addForm
+    case 'addForm':
+        ProjetsController\addFormAction($connexion);
+        break;
+
+    // AJOUT D'UN PROJET (données du formulaire en POST)
+    // PATTERN: /projects/add/insert.html
+    // URL: ?projets=insert
+    // CTRL: projetsController
+    // ACTION: insert
+    case 'insert':
+        ProjetsController\insertAction($connexion, $_POST, $_FILES);
+        break;
+
+    // PAR DÉFAUT : liste des projets
     default:
         ProjetsController\indexAction($connexion);
         break;

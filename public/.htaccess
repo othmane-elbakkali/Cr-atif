@@ -18,3 +18,12 @@ RewriteRule ^projets\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\.html$ ?proj
 # Exemple : /projets/delete/12/mon-projet.html
 # Devient : ?projets=delete&id=12
 RewriteRule ^projets\/delete\/([1-9][0-9]*)\/[a-z0-9]([a-z0-9\-]*[a-z0-9])*\.html$ ?projets=delete&id=$1 [L]
+
+# Route : /projects/add/form.html (formulaire d'ajout)
+# Devient : ?projets=addForm
+RewriteRule ^projects\/add\/form\.html$ ?projets=addForm [L]
+
+
+# Route : /projects/add/insert.html (ajout, données du formulaire en POST)
+# Devient : ?projets=insert
+RewriteRule ^projects\/add\/insert\.html$ ?projets=insert [L]

@@ -37,7 +37,7 @@ function findOneById(PDO $connexion, int $id): array
     return $rs->fetch(PDO::FETCH_ASSOC);
 }
 
-// Je supprime un projet (ses tags doivent avoir été supprimés avant)
+// Je supprime un projet 
 function deleteOneById(PDO $connexion, int $id): int
 {
     $sql = "DELETE FROM projets
@@ -47,4 +47,25 @@ function deleteOneById(PDO $connexion, int $id): int
     $rs->bindValue(':id', $id, PDO::PARAM_INT);
 
     return intval($rs->execute());
+}
+
+
+// J'ajoute un projet et je renvoie son id
+// $data : les champs du formulaire (titre, resume, texte, creatif)
+// $image : le nom du fichier image enregistré (ou null)
+function insertOne(PDO $connexion, array $data, ?string $image): int
+{
+    $sql = "INSERT INTO projets (titre, resume, texte, dateCreation, image, creatif)
+            VALUES (:titre, :resume, :texte, NOW(), :image, :creatif);";
+
+    $rs = $connexion->prepare($sql);
+    $rs->bindValue(':titre', $data['titre'], PDO::PARAM_STR);
+    $rs->bindValue(':resume', $data['resume'], PDO::PARAM_STR);
+    $rs->bindValue(':texte', $data['texte'], PDO::PARAM_STR);
+    $rs->bindValue(':image', $image, PDO::PARAM_STR);
+    $rs->bindValue(':creatif', $data['creatif'], PDO::PARAM_INT);
+    $rs->execute();
+
+    // l'id du projet qui vient d'être ajouté
+    return intval($connexion->lastInsertId());
 }
